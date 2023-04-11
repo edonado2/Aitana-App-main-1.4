@@ -7,10 +7,10 @@ const initialState = {
 
 };
 
-export const setUserId = (userId) => {
+export const setUserId = (userId, email, token, name) => {
     return {
         type: 'SET_USER_ID',
-        payload: userId,
+        payload: { userId, email, token, name }
     };
 };
 
@@ -23,7 +23,11 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 auth: {
                     ...state.auth,
-                    userId: action.payload,
+                    userId: action.payload.userId,
+                    email: action.payload.email,
+                    token: action.payload.token,
+                    name: action.payload.name
+
                 },
                 denuncias: [], // clear denuncias state when user logs in
             };

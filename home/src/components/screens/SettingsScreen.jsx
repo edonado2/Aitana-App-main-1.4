@@ -19,12 +19,18 @@ import { Input } from 'react-native-elements';
 const FormScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userId = useSelector(state => state.auth.userId);
-    const token = useSelector((state) => state.auth.token);
+    const token = useSelector(state => state.auth.token);
+    const email = useSelector(state => state.auth.email);
+    const name = useSelector(state => state.auth.name);
+    // const { userId, token, email, name } = useSelector(state => state.auth)
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-
+    // console.log(email, "email respuesta");
+    console.log(userId, "userId respuesta");
+    console.log(token, "token respuesta");
+    console.log(email, "respuesta email")
 
     const handleLogout = async () => {
         try {
@@ -272,8 +278,8 @@ const FormScreen = ({ navigation }) => {
                                 require("../images/perfil.png")
                             }
                         />
-                        <Text style={{ textAlign: "center", alignSelf: "center", fontFamily: "OpenSans_400Regular", fontSize: 17, }}>Fulanito</Text>
-                        <Text style={{ textAlign: "center", alignSelf: "center", fontFamily: "OpenSans_400Regular", fontSize: 17, marginTop: 5 }}>fulanito@gmail.com</Text>
+                        <Text style={{ textAlign: "center", alignSelf: "center", fontFamily: "OpenSans_400Regular", fontSize: 17, }}>{name}</Text>
+                        <Text style={{ textAlign: "center", alignSelf: "center", fontFamily: "OpenSans_400Regular", fontSize: 17, marginTop: 5 }}>{email}</Text>
                     </View>
 
                     <View style={{ padding: 16, backgroundColor: "#fff", }}>

@@ -8,6 +8,7 @@ import HomeScreen from './home/src/components/screens/HomeScreen';
 import AppNavigator from './home/navigation/AppNavigator';
 import { Provider } from 'react-redux';
 import store from './home/src/reduxStore/reduxStore';
+import { LogBox } from 'react-native';
 
 
 export default function RegisterScreen(props) {
@@ -20,6 +21,7 @@ export default function RegisterScreen(props) {
     // Here, you can check if the user is logged in and set the isLoggedIn variable accordingly.
     setIsLoggedIn(false); // Change this line to your login logic
   };
+  LogBox.ignoreAllLogs();
 
   if (!IsReady) {
     return (

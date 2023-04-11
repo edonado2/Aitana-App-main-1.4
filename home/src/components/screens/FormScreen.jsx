@@ -13,13 +13,13 @@ const FormScreen = ({ navigation }) => {
   const [denuncias, setDenuncias] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { userId } = useSelector((state) => state.auth);
+  const userId = useSelector(state => state.auth.userId);
 
   useEffect(() => {
     fetch(`http://192.168.3.101:8070/users/${userId}/denuncias`)
       .then((response) => response.json())
       .then((data) => {
-        setDenuncias(data.denuncias1);
+        setDenuncias(data.denuncias2);
       })
       .catch((error) => console.log(error));
   }, [userId]);

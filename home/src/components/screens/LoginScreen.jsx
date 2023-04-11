@@ -71,10 +71,10 @@ const LoginScreen = ({ navigation }) => {
             onLoggedIn(jsonRes.token);
             setError(false);
             setMessage(jsonRes.message);
-            dispatch(setUserId(res.data.userId));
+            dispatch(setUserId(res.data.userId, email, res.data.token, res.data.name));
             navigation.navigate('Home');
           }
-          console.log(res.data.userId, 'userId');
+          console.log(res.data, 'resLogin');
         } catch (err) {
           console.log(err);
         }
@@ -128,7 +128,7 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableOpacity>
-        {message !== '' && <Text style={{ color: 'red', textAlign: 'center' }}>{'Correo o contraseña invalida'}</Text>}
+        {message !== '' && <Text style={{ color: 'red', textAlign: 'center' }}>{''}</Text>}
 
         <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('ResetPass')}>
           <Text style={styles.linkText}>Recuperar Contraseña</Text>
