@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, Pressable, Dimensions, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -31,7 +32,16 @@ const FormScreen = ({ navigation }) => {
   const formIsOpenHandler = () => {
     setFormIsOpen(!formIsOpen);
   };
-
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetch(`http://192.168.3.101:8070/users/${userId}/denuncias`)
+      .then((response) => response.json())
+      .then((data) => {
+        setDenuncias(data.denuncias2);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setRefreshing(false));
+  }, [userId]);
   const renderItem = ({ item }) => (
     <View style={{ flexDirection: 'row', padding: 20 }}>
       <Text style={{ flex: 1, padding: 2, fontSize: Dimensions.get('window').width < 600 ? 12 : 16 }}>
@@ -54,63 +64,69 @@ const FormScreen = ({ navigation }) => {
   );
 
   return (
-    <NativeRouter>
-      <StatusBar backgroundColor="#fff" style={{ color: '#000' }} />
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <NativeRouter>
+        <StatusBar backgroundColor="#fff" style={{ color: '#000' }} />
 
-      <View style={{ marginTop: Constants.statusBarHeight, flexGrow: 1 }}>
-        {/* Start header */}
-        <View style={{ width: '100%', height: 50, backgroundColor: '#fff', flexDirection: 'row' }}>
-          <Image
-            style={{ width: 30, height: 30, marginLeft: 15, alignSelf: 'center' }}
-            resizeMode="contain"
-            source={require('../images/logo.png')}
-          />
-          <Text
-            style={{
-              textAlign: 'center',
-              alignSelf: 'center',
-              fontFamily: 'OpenSans_700Bold',
-              fontSize: 17,
-              marginLeft: 2,
-            }}
-          >
-            Denuncias
-          </Text>
-        </View>
-        {/* End header */}
-
-        <ScrollView bounces={false} bouncesZoom={false}>
-          <View style={{ padding: 16, backgroundColor: '#fff' }}>
-            <Link
-              to="/ReportScreenComponents/Form"
+        <View style={{ marginTop: Constants.statusBarHeight, flexGrow: 1 }}>
+          {/* Start header */}
+          <View style={{ width: '100%', height: 50, backgroundColor: '#fff', flexDirection: 'row' }}>
+            <Image
+              style={{ width: 30, height: 30, marginLeft: 15, alignSelf: 'center' }}
+              resizeMode="contain"
+              source={require('../images/logo.png')}
+            />
+            <Text
               style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 48,
-                borderRadius: 24,
-                elevation: 3,
-                backgroundColor: '#745c98',
+                textAlign: 'center',
+                alignSelf: 'center',
+                fontFamily: 'OpenSans_700Bold',
+                fontSize: 17,
+                marginLeft: 2,
               }}
             >
-              <Text style={{ fontSize: 16, color: '#fff' }}>Emitir una denuncia</Text>
-            </Link>
-          </View>
-
-          <View style={{ padding: 16 }}>
-            <Text style={{ textAlign: 'center', alignSelf: 'center', fontFamily: 'OpenSans_700Bold', fontSize: 17 }}>
-              Historial de denuncias
+              Denuncias
             </Text>
-
-            <FlatList data={denuncias} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
           </View>
-        </ScrollView>
+          {/* End header */}
 
-        <Routes>
-          <Route path="../" element={<FormScreen />} />
-          <Route path="/ReportScreenComponents/Form" element={<ReportForm />} />
-        </Routes>
-      </View>
-    </NativeRouter>
+          <ScrollView bounces={false} bouncesZoom={false}>
+            <View style={{ padding: 16, backgroundColor: '#fff' }}>
+              <Link
+                to="/ReportScreenComponents/Form"
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 48,
+                  borderRadius: 24,
+                  elevation: 3,
+                  backgroundColor: '#745c98',
+                }}
+              >
+                <Text style={{ fontSize: 16, color: '#fff' }}>Emitir una denuncia</Text>
+              </Link>
+            </View>
+
+            <View style={{ padding: 16 }}>
+              <Text style={{ textAlign: 'center', alignSelf: 'center', fontFamily: 'OpenSans_700Bold', fontSize: 17 }}>
+                Historial de denuncias
+              </Text>
+
+              <FlatList data={denuncias} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
+            </View>
+          </ScrollView>
+
+          <Routes>
+            <Route path="../" element={<FormScreen />} />
+            <Route path="/ReportScreenComponents/Form" element={<ReportForm />} />
+          </Routes>
+        </View>
+      </NativeRouter>
+    </ScrollView>
   );
 };
 
